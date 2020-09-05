@@ -43,7 +43,7 @@
 
 ;; sublist:
 ;; Propósito:
-;; Procedimiento recibe como argumento una lista L,
+;; Procedimiento que recibe como argumento una lista L,
 ;; un núumero inicial i y un núumero final j.
 ;; y retorna la sublista entre el elemento en posición i y
 ;; el elemento en posición j (ambos elementos incluidos).
@@ -63,4 +63,45 @@
 ;; Pruebas
 (sublist '(a b c d e) 1 3)
 (sublist '((a b) c a b c 9) 3 4)
+
+
+;; exists?:
+;; Propósito:
+;; Procedimiento que recibe dos argumentos:
+;; un predicado P y una lista L, y retorna
+;; #t si algúun elemento de la lista L satisface el predicado P.
+;; Devuelve #f en caso contrario.
+
+(define exists? (lambda (P L)
+                     (cond
+                       [(empty? L) #f]
+                       [(P (car L)) #t]             
+                       [else (exists? P (cdr L))]
+                     )
+                  )
+  )
+
+;; Pruebas
+(exists? empty? '(a b c c e))
+(exists? symbol? '(a b c d 4))
+
 |#
+;; list-fibo:
+;; Propósito:
+;; Procedimiento que recibe como argumento un numero entero n,
+;; y retorna una lista ascendente con los n-términos de la
+;; sucesión fibonacci.
+
+(define list-fibo (lambda (n)
+                     (cond
+                       [(< n 0) (error "No se pueden números negativos")]
+                       [(= n 0) '(0)]
+                       [(= n 1) '(0 1)]
+                       [else (append (list-fibo (- n 1)) (list (+ (last (list-fibo (- n 2))) (last (list-fibo (- n 1))))))]                      
+                       )
+                  )
+  )
+
+;; Pruebas
+(list-fibo 1)
+(list-fibo 6)
