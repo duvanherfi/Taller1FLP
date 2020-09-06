@@ -161,13 +161,26 @@
 ;; Y retorna el numero de ocurrencias del elemento en la lista.
 
 (define count-occurrences (lambda (x L)
-                     0
+                     (cond
+                       [(empty? L) 0]                       
+                       [else (+
+                              (if (list? (car L))
+                                  (count-occurrences x (car L))
+                                  (if (equal? x (car L))
+                                    1
+                                    0)
+                                  )                            
+                              (count-occurrences x (cdr L)))]
+                       )
                   )
   )
 
 ;; Pruebas
-;(count-occurrences 'x '((f x) y (((x z) () x))))
-;(count-occurrences 2 '((f x) y (((x 2) x))))
+(count-occurrences 'x '(x 3 x r 2 x))
+(count-occurrences 'x '((f x) y (((x z) () x))))
+(count-occurrences 2 '((f x) y (((x 2) x))))
+(count-occurrences 'x '((f x x) y (((x x z) ((x) x) x))))
+|#
 ;--------------------------------------------------------------------------------------------------
   ;8
 ;; flatten:
@@ -176,16 +189,29 @@
 ;; Y retorna una lista eliminando los parentesis internos.
 
 (define flatten (lambda (L)
-                     (cond
-                       [(empty? L) empty]
-                       [(list? (car L)) (flatten (car L))]
-                       [else (cons (car L) (flatten (cdr L)))]
+                     #|(cond
+                       [(empty? L) empty]                       
+                       [else (list
+                              (if (list? (car L))
+                                  (flatten (car L))
+                                  (car L)
+                                  )                            
+                              (flatten (cdr L))
+                              )]
+                       )|#
+                       (cond
+                         [(empty? L) '()]
+                         [(list? (car L)) (flatten (car L))]
+                         [(or (number? (car L)) (symbol? (car L)))
+                          (list
+                           (car L)                                                               
+                           (flatten (cdr L))
+                                )]
                        )
-                  )
-  )
+  ))
 
 ;; Pruebas
-;(flatten '((a b) c (((d)) e)));solo evalua la primera lista ****
+(flatten '((a b) c (((d)) e)));solo evalua la primera lista ****
 ;--------------------------------------------------------------------------------------------------
   ;9
 ;; every?:
@@ -195,7 +221,7 @@
 ;; Y retorna #t si TODOS los elementos
 ;; de la lista L satisfacen el predicado P.
 ;; Devuelve #f en caso contrario.
-
+#|
 (define every? (lambda (P L)
                      (if (empty? L)
                          #t                     
@@ -208,6 +234,5 @@
 (every? symbol? '(a b c 3 e))
 (every? number? '(1 2 3 5 4))
 ;----------------------------------------------------------------------------------------------------
-
 |#
 
