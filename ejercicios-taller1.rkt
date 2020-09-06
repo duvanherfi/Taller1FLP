@@ -3,7 +3,8 @@
 ;;JUAN SEBASTIAN GRAJALES CRUZ - 202010004
 ;;DUVAN HERNANDEZ FIGUEROA     - 202010009
 ;;DIEGO FERNANDO MUÑOZ ARCE    - 202010032
-
+;----------------------------------------------------------------------------
+  ;1.
 ;; copy :
 ;; Propósito:
 ;; Procedimiento que recibe un número n y una entrda x
@@ -21,7 +22,8 @@
 (copy 7 'seven)
 (copy 4 (list 1 2 3))
 (copy 0 (list 5 6 7))
-
+;------------------------------------------------------------------------------
+  ;2
 ;; list-tails:
 ;; Propósito:
 ;; Procedimiento que recibe como argumento una lista L
@@ -39,7 +41,8 @@
 ;; Pruebas
 (list-tails '(1 2 3 4 5))
 (list-tails '(1 a (e 4) 5 v))
-
+;------------------------------------------------------------------------------
+  ;3
 
 ;; sublist:
 ;; Propósito:
@@ -63,8 +66,8 @@
 ;; Pruebas
 (sublist '(a b c d e) 1 3)
 (sublist '((a b) c a b c 9) 3 4)
-
-
+;---------------------------------------------------------------------------------
+  ;4
 ;; exists?:
 ;; Propósito:
 ;; Procedimiento que recibe dos argumentos:
@@ -84,8 +87,8 @@
 ;; Pruebas
 (exists? empty? '(a b c c e))
 (exists? symbol? '(a b c d 4))
-
-
+;----------------------------------------------------------------------------------
+  ;5
 ;; list-fibo:
 ;; Propósito:
 ;; Procedimiento que recibe como argumento un numero entero n,
@@ -105,8 +108,8 @@
 ;; Pruebas
 (list-fibo 1)
 (list-fibo 6)
-
-
+;----------------------------------------------------------------------------------
+  ;6
 ;; factorial:
 ;; Propósito:
 ;; Procedimiento que recibe como argumento un numero entero n,
@@ -149,8 +152,8 @@
 ;; Pruebas
 (list-facts-two 5)
 (list-facts-two 8)
-
-
+;---------------------------------------------------------------------------------------------------
+  ;7
 ;; count-occurrences:
 ;; Propósito:
 ;; Procedimiento que recibe como argumento un elemento x
@@ -165,8 +168,8 @@
 ;; Pruebas
 ;(count-occurrences 'x '((f x) y (((x z) () x))))
 ;(count-occurrences 2 '((f x) y (((x 2) x))))
-
-
+;--------------------------------------------------------------------------------------------------
+  ;8
 ;; flatten:
 ;; Propósito:
 ;; Procedimiento que recibe como argumento una lista L
@@ -183,8 +186,8 @@
 
 ;; Pruebas
 ;(flatten '((a b) c (((d)) e)));solo evalua la primera lista ****
-
-
+;--------------------------------------------------------------------------------------------------
+  ;9
 ;; every?:
 ;; Propósito:
 ;; Procedimiento que recibir dos argumentos: un predicado P
@@ -204,6 +207,7 @@
 ;; Pruebas
 (every? symbol? '(a b c 3 e))
 (every? number? '(1 2 3 5 4))
+;----------------------------------------------------------------------------------------------------
 
 |#
 
