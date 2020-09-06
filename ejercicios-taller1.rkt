@@ -85,7 +85,7 @@
 (exists? empty? '(a b c c e))
 (exists? symbol? '(a b c d 4))
 
-|#
+
 ;; list-fibo:
 ;; Propósito:
 ;; Procedimiento que recibe como argumento un numero entero n,
@@ -105,3 +105,105 @@
 ;; Pruebas
 (list-fibo 1)
 (list-fibo 6)
+
+
+;; factorial:
+;; Propósito:
+;; Procedimiento que recibe como argumento un numero entero n,
+;; y retorna el factorial del número n
+
+(define factorial (lambda (n)
+                     (cond
+                       [(< n 0) (error "No se pueden números negativos")]
+                       [(= n 0) 1]
+                       [else (* n (factorial (- n 1)))]                                    
+                       )
+                  )
+  )
+
+;; Pruebas
+;(factorial 4)
+;(factorial 5)
+
+
+;; list-facts-two:
+;; Propósito:
+;; Procedimiento que recibe como argumento un numero entero n,
+;; y retorna una lista incremental de factoriales dobles.
+;; Un factorial doble inicia en 1! si n es impar y continuará
+;; calculando los factoriales de los núumeros impares hasta n!.
+;; Si n es par, entonces inicia en 2! y continuará calculando
+;; los factoriales de núumeros pares hasta n!
+
+(define list-facts-two (lambda (n)
+                     (cond
+                       [(< n 0) (error "No se pueden números negativos")]
+                       [(= n 0) empty]
+                       [(= n 1) '(1)]
+                       [(even? n) (append (list-facts-two (- n 2)) (list (factorial n)))]
+                       [(not (even? n)) (append (list-facts-two (- n 2)) (list (factorial n)))]
+                       )
+                  )
+  )
+
+;; Pruebas
+(list-facts-two 5)
+(list-facts-two 8)
+
+
+;; count-occurrences:
+;; Propósito:
+;; Procedimiento que recibe como argumento un elemento x
+;; y una lista L.
+;; Y retorna el numero de ocurrencias del elemento en la lista.
+
+(define count-occurrences (lambda (x L)
+                     0
+                  )
+  )
+
+;; Pruebas
+;(count-occurrences 'x '((f x) y (((x z) () x))))
+;(count-occurrences 2 '((f x) y (((x 2) x))))
+
+
+;; flatten:
+;; Propósito:
+;; Procedimiento que recibe como argumento una lista L
+;; Y retorna una lista eliminando los parentesis internos.
+
+(define flatten (lambda (L)
+                     (cond
+                       [(empty? L) empty]
+                       [(list? (car L)) (flatten (car L))]
+                       [else (cons (car L) (flatten (cdr L)))]
+                       )
+                  )
+  )
+
+;; Pruebas
+;(flatten '((a b) c (((d)) e)));solo evalua la primera lista ****
+
+
+;; every?:
+;; Propósito:
+;; Procedimiento que recibir dos argumentos: un predicado P
+;; y una lista L.
+;; Y retorna #t si TODOS los elementos
+;; de la lista L satisfacen el predicado P.
+;; Devuelve #f en caso contrario.
+
+(define every? (lambda (P L)
+                     (if (empty? L)
+                         #t                     
+                         (and (P (car L)) (every? P (cdr L)))                           
+                         )
+                  )
+  )
+
+;; Pruebas
+(every? symbol? '(a b c 3 e))
+(every? number? '(1 2 3 5 4))
+
+|#
+
