@@ -208,6 +208,34 @@
 (every? symbol? '(a b c 3 e))
 (every? number? '(1 2 3 5 4))
 ;----------------------------------------------------------------------------------------------------
-
 |#
+
+  ;10. Elabore una función llamada upside-down que recibe como argumento un número n y devuelve el numero
+;;en el orden inverso al que se recibió.
+
+(define carac (lambda (c)
+                (cond
+                  [(empty? c) ""]
+                  [else (string-append (string (car c)) (carac (cdr c)))]
+                )))
+
+(define upside-down (lambda (n)
+                     (if (number? n)                                           
+                         (string->number (string-append (upside-down (string->number (carac (cdr (string->list (number->string n))))))
+                                 (string (car (string->list (number->string n)))))                                  
+                         )
+                         ""
+                  )
+  ))
+  
+;; (string->number (string (car (string->list (number->string 12345)))))
+;; Pruebas
+ (upside-down 513)
+ (upside-down 9513)
+;; 3159
+
+
+
+
+
 
