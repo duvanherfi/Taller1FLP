@@ -200,13 +200,10 @@
                               )]
                        )|#
                        (cond
-                         [(empty? L) '()]
-                         [(list? (car L)) (flatten (car L))]
-                         [(or (number? (car L)) (symbol? (car L)))
-                          (list
-                           (car L)                                                               
-                           (flatten (cdr L))
-                                )]
+                       [(empty? L) empty]
+                       [(list? (car L)) (append (car L) (flatten (cdr L)))]
+                       [else (append (list (car L)) (flatten (cdr L)))]
+                       
                        )
   ))
 
