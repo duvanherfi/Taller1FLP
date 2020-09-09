@@ -4,7 +4,7 @@
 ;;DUVAN HERNANDEZ FIGUEROA     - 202010009
 ;;DIEGO FERNANDO MUÑOZ ARCE    - 202010032
 ;----------------------------------------------------------------------------
-  ;1.
+;;1.
 ;; copy :
 ;; Propósito:
 ;; Procedimiento que recibe un número n y una entrda x
@@ -23,7 +23,7 @@
 (copy 4 (list 1 2 3))
 (copy 0 (list 5 6 7))
 ;------------------------------------------------------------------------------
-  ;2
+;;2.
 ;; list-tails:
 ;; Propósito:
 ;; Procedimiento que recibe como argumento una lista L
@@ -42,8 +42,7 @@
 (list-tails '(1 2 3 4 5))
 (list-tails '(1 a (e 4) 5 v))
 ;------------------------------------------------------------------------------
-  ;3
-
+;;3.
 ;; sublist:
 ;; Propósito:
 ;; Procedimiento que recibe como argumento una lista L,
@@ -67,7 +66,7 @@
 (sublist '(a b c d e) 1 3)
 (sublist '((a b) c a b c 9) 3 4)
 ;---------------------------------------------------------------------------------
-  ;4
+;;4.
 ;; exists?:
 ;; Propósito:
 ;; Procedimiento que recibe dos argumentos:
@@ -88,7 +87,7 @@
 (exists? empty? '(a b c c e))
 (exists? symbol? '(a b c d 4))
 ;----------------------------------------------------------------------------------
-  ;5
+;;5.
 ;; list-fibo:
 ;; Propósito:
 ;; Procedimiento que recibe como argumento un numero entero n,
@@ -109,7 +108,7 @@
 (list-fibo 1)
 (list-fibo 6)
 ;----------------------------------------------------------------------------------
-  ;6
+;;6.
 ;; factorial:
 ;; Propósito:
 ;; Procedimiento que recibe como argumento un numero entero n,
@@ -153,7 +152,7 @@
 (list-facts-two 5)
 (list-facts-two 8)
 ;---------------------------------------------------------------------------------------------------
-  ;7
+;;7.
 ;; count-occurrences:
 ;; Propósito:
 ;; Procedimiento que recibe como argumento un elemento x
@@ -180,45 +179,40 @@
 (count-occurrences 'x '((f x) y (((x z) () x))))
 (count-occurrences 2 '((f x) y (((x 2) x))))
 (count-occurrences 'x '((f x x) y (((x x z) ((x) x) x))))
-|#
+
 ;--------------------------------------------------------------------------------------------------
-  ;8
+;;8.
 ;; flatten:
 ;; Propósito:
 ;; Procedimiento que recibe como argumento una lista L
 ;; Y retorna una lista eliminando los parentesis internos.
 
 (define flatten (lambda (L)
-                     #|(cond
+                     (cond
                        [(empty? L) empty]                       
-                       [else (list
+                       [else (append
                               (if (list? (car L))
                                   (flatten (car L))
-                                  (car L)
+                                  (list(car L))
                                   )                            
                               (flatten (cdr L))
                               )]
-                       )|#
-                       (cond
-                       [(empty? L) empty]
-                       [(list? (car L)) (append (car L) (flatten (cdr L)))]
-                       [else (append (list (car L)) (flatten (cdr L)))]
-                       
                        )
   ))
 
 ;; Pruebas
-(flatten '((a b) c (((d)) e)));solo evalua la primera lista ****
+(flatten '((a b) c (((d)) e)))
+(flatten '((a) () (2 ()) () (c)))
 ;--------------------------------------------------------------------------------------------------
-  ;9
+;;9.
 ;; every?:
 ;; Propósito:
-;; Procedimiento que recibir dos argumentos: un predicado P
+;; Procedimiento que recibe dos argumentos: un predicado P
 ;; y una lista L.
 ;; Y retorna #t si TODOS los elementos
 ;; de la lista L satisfacen el predicado P.
 ;; Devuelve #f en caso contrario.
-#|
+
 (define every? (lambda (P L)
                      (if (empty? L)
                          #t                     
@@ -231,33 +225,82 @@
 (every? symbol? '(a b c 3 e))
 (every? number? '(1 2 3 5 4))
 ;----------------------------------------------------------------------------------------------------
-|#
 
-  ;10. Elabore una función llamada upside-down que recibe como argumento un número n y devuelve el numero
-;;en el orden inverso al que se recibió.
+;;10.
+;; splitnumber:
+;; Propósito:
+(define splitnumber (lambda (n)
+                      (if(< n 10)
+                         (number->string n)
+                         (string-append (number->string (remainder n 10))  (splitnumber (quotient n 10)))
+                         ) 
+                      )
+  )
 
-(define carac (lambda (c)
-                (cond
-                  [(empty? c) ""]
-                  [else (string-append (string (car c)) (carac (cdr c)))]
-                )))
+;; upside-down:
+;; Propósito:
+;; Procedimiento que recibe como argumento un número n.
+;; y devuelve el numero en el orden inverso al que se recibió.
 
 (define upside-down (lambda (n)
-                     (if (number? n)                                           
-                         (string->number (string-append (upside-down (string->number (carac (cdr (string->list (number->string n))))))
-                                 (string (car (string->list (number->string n)))))                                  
-                         )
-                         ""
-                  )
-  ))
+                      (string->number (splitnumber n))                         
+                      )
+  )
   
 ;; (string->number (string (car (string->list (number->string 12345)))))
 ;; Pruebas
- (upside-down 513)
+ (upside-down 432)
  (upside-down 9513)
-;; 3159
+;;-------------------------------------------------------------------
+;; 11.
+;; merge:
+;; Propósito: función que recibe como entrada dos listas
+;; de enteros ordenadas ascendentemente L1 y L2.
+;; Y retorna una lista ordenada de todos los elementos de las listas L1 y L2.
 
+(define merge (lambda (L1 L2)
+                        (cond
+                          [(empty? L1) L2]
+                          [(empty? L2) L1]
+                          [(<= (car L1) (car L2)) (cons  (car L1) (merge (cdr L1) L2))]
+                          [else (cons  (car L2) (merge L1 (cdr L2)))]
+                          )
+                      )
+  )
+;;pruebas
+(merge '(1 4) '(1 2 8))
+(merge '(35 62 81 90 91) '(3 83 85 90))
 
+;;--------------------------------------------------------
+;;12.
+;; zip:
+;; Propósito: función que recibe como entrada tres parámetros:
+;; una función binaria (función que espera recibir dos argumentos) F, y dos listas
+;; L1 y L2, ambas de igual tamaño.
+;; Y retorna una lista donde la posición n-énesima corresponde al resultado de aplicar la
+;; función F sobre los elementos en la posición n-énesima en L1 y L2.
+
+(define zip (lambda (F L1 L2)
+                        (cond
+                         [(empty? L1) empty]
+                         [else (cons (F (car L1) (car L2)) (zip F (cdr L1) (cdr L2)))]
+                         )
+                      )
+  )
+;;pruebas
+(zip + '(1 4) '(6 2))
+(zip * '(11 5 6) '(10 9 8)
+|#
+;;--------------------------------------------------------
+;;13.
+;; filter-acum:
+;; Propósito:
+
+(define filter-acum (lambda (F L1 L2)
+                        
+                      )
+  )
+;;pruebas
 
 
 
