@@ -294,13 +294,23 @@
 ;;--------------------------------------------------------
 ;;13.
 ;; filter-acum:
-;; Propósito:
+;; Propósito: función que recibe como entrada 5 parámetros: dos números a y b,
+;; una función binaria F, un valor inicial acum y una función unaria filter.
+;; Y retorna acum aplicando función binaria F en el intervalo de a y b si cumple con la
+;; función unaria filter.
 
-(define filter-acum (lambda (F L1 L2)
+(define filter-acum (lambda (a b F acum filter)
+                        (cond
+                        [(> a b) acum]
+                        [(filter a) (F acum a (filter-acum (+ a 1) b F acum filter))]
+                        [else (filter-acum (+ a 1) b F acum filter)]
                         
+                        )
                       )
   )
 ;;pruebas
+(filter-acum 1 10 + 0 odd?)
+(filter-acum 1 10 + 0 even?)
 
 
 
