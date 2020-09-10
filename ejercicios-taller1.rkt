@@ -315,20 +315,11 @@
 
 ;--------------------------------------------------------------
 ;;14.
-;; sort:
-;; Propósito: función que recibe como entrada dos argumentos:
-;; una lista de elementos L y una función de comparación F.
-;; Y retorna la lista L ordenada aplicando la función de comparación F.
 
-(define sort (lambda (L F)
-               (cond
-                 [(empty? L) empty]
-                 [else (cons (organizar L F) (sort (eliminar (organizar L F) L) F))])
-               )
-  )
 
 ;; eliminar:
-;; Propósito: 
+;; Propósito: Funcion auxiliar que recibe como argumento un numero n y una lista L,
+;; y retorna la lista sin ese elemento n.
 
 (define eliminar (lambda (n L)
                    (cond
@@ -339,8 +330,13 @@
                    )
   )
 
+;;pruebas
+(eliminar 2 '(2 4))
+(eliminar 3 '(5 3 2))
+
 ;; organizar:
-;; Propósito:
+;; Propósito: Funcion Auxiliar que recibe una lista L y una funcion de comparación
+;; F y retorna el numero que cumpla con la funcion de comparación F
 
 (define organizar (lambda (L F)
                     (cond
@@ -352,6 +348,21 @@
                     )
   )
 
+;;pruebas
+(organizar '(3 4 2 1) <)
+(organizar '(2 4 7 6) >)
+
+;; sort:
+;; Propósito: función que recibe como entrada dos argumentos:
+;; una lista de elementos L y una función de comparación F.
+;; Y retorna la lista L ordenada aplicando la función de comparación F.
+
+(define sort (lambda (L F)
+               (cond
+                 [(empty? L) empty]
+                 [else (cons (organizar L F) (sort (eliminar (organizar L F) L) F))])
+               )
+  )
 
 ;;pruebas
 (sort '(8 2 5 2 3) <)
