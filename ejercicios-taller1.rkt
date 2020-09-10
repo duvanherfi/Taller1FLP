@@ -312,7 +312,7 @@
 ;;pruebas
 (filter-acum 1 10 + 0 odd?)
 (filter-acum 1 10 + 0 even?)
-|#
+
 ;--------------------------------------------------------------
 ;;14.
 ;; sort:
@@ -320,26 +320,59 @@
 ;; una lista de elementos L y una función de comparación F.
 ;; Y retorna la lista L ordenada aplicando la función de comparación F.
 
-(define (eliminar n L)
-  (cond
-    [(empty? L) empty]
-    [(eq? n (car L)) (cdr L)]
-    [else (cons (car L) (eliminar n (cdr L)))]))
+(define sort (lambda (L F)
+               (cond
+                 [(empty? L) empty]
+                 [else (cons (organizar L F) (sort (eliminar (organizar L F) L) F))])
+               )
+  )
 
-(define (organizar L F)
-  (cond
-    [(empty? L) empty]
-    [(empty? (cdr L)) (car L)]
-    [(F (car L) (car (cdr L))) (organizar (cons (car L) (cddr L)) F)]
-    [else (organizar (cdr L) F)]))
+;; eliminar:
+;; Propósito: 
 
-(define (sort L F)
-  (cond
-    [(empty? L) empty]
-    [else (cons (organizar L F) (sort (eliminar (organizar L F) L) F))]))
+(define eliminar (lambda (n L)
+                   (cond
+                     [(empty? L) empty]
+                     [(eq? n (car L)) (cdr L)]
+                     [else (cons (car L) (eliminar n (cdr L)))]
+                     )
+                   )
+  )
+
+;; organizar:
+;; Propósito:
+
+(define organizar (lambda (L F)
+                    (cond
+                      [(empty? L) empty]
+                      [(empty? (cdr L)) (car L)]
+                      [(F (car L) (car (cdr L))) (organizar (cons (car L) (cddr L)) F)]
+                      [else (organizar (cdr L) F)]
+                      )
+                    )
+  )
+
+
 ;;pruebas
 (sort '(8 2 5 2 3) <)
 (sort '(8 2 5 2 3) >)
 (sort '("a" "c" "bo" "za" "lu") string>)
+|#
+;--------------------------------------------------------------------------
+;;15.
+;; hermite:
+;; Propósito: función que recibe como entrada dos argumentos:
+;; el orden n del polinomio de Hermite y la abscisa x.
+;; Y retorna el resultado del calculo. 
 
-
+(define hermite (lambda (n x)
+                  (cond
+                    [(= n 0) 1]
+                    [(= n 1) (* 2 x)]
+                    [else (- (* (* 2 x) (hermite (- n 1) x)) (* (* 2 (- n 1)) (hermite (- n 2) x)))]
+                    )
+                  )  
+  )
+;;pruebas
+(hermite 5 2)
+(hermite 5 8)
