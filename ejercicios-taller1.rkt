@@ -1,4 +1,5 @@
 #lang racket
+(require srfi/13)
 
 ;;JUAN SEBASTIAN GRAJALES CRUZ - 202010004
 ;;DUVAN HERNANDEZ FIGUEROA     - 202010009
@@ -290,7 +291,7 @@
 ;;pruebas
 (zip + '(1 4) '(6 2))
 (zip * '(11 5 6) '(10 9 8)
-|#
+
 ;;--------------------------------------------------------
 ;;13.
 ;; filter-acum:
@@ -311,7 +312,34 @@
 ;;pruebas
 (filter-acum 1 10 + 0 odd?)
 (filter-acum 1 10 + 0 even?)
+|#
+;--------------------------------------------------------------
+;;14.
+;; sort:
+;; Propósito: función que recibe como entrada dos argumentos:
+;; una lista de elementos L y una función de comparación F.
+;; Y retorna la lista L ordenada aplicando la función de comparación F.
 
+(define (eliminar n L)
+  (cond
+    [(empty? L) empty]
+    [(eq? n (car L)) (cdr L)]
+    [else (cons (car L) (eliminar n (cdr L)))]))
 
+(define (organizar L F)
+  (cond
+    [(empty? L) empty]
+    [(empty? (cdr L)) (car L)]
+    [(F (car L) (car (cdr L))) (organizar (cons (car L) (cddr L)) F)]
+    [else (organizar (cdr L) F)]))
+
+(define (sort L F)
+  (cond
+    [(empty? L) empty]
+    [else (cons (organizar L F) (sort (eliminar (organizar L F) L) F))]))
+;;pruebas
+(sort '(8 2 5 2 3) <)
+(sort '(8 2 5 2 3) >)
+(sort '("a" "c" "bo" "za" "lu") string>)
 
 
