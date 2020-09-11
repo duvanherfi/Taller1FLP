@@ -105,7 +105,7 @@
                                           ])
                               (cond
                                 [(= n 0) '(0)]
-                                [else (cons (fibonacci n) (list-fibo (- n 1)))]
+                                [else (append (list-fibo (- n 1)) (list (fibonacci n)))]
                                 )
                               )
                   )
