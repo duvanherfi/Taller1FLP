@@ -1,5 +1,4 @@
-#lang racket
-(require srfi/13)
+#lang eopl
 
 ;;JUAN SEBASTIAN GRAJALES CRUZ - 202010004
 ;;DUVAN HERNANDEZ FIGUEROA     - 202010009
@@ -10,7 +9,7 @@
 ;; Propósito:
 ;; Procedimiento que recibe un número n y una entrda x
 ;; y retorna una lista con n ocurrencias de x.
-#|
+
 (define copy (lambda (n x)
                (if (= n 0)
                    empty
@@ -32,7 +31,7 @@
 ;; sublistas de los elementos consecutivos de la lista L.
 
 (define list-tails (lambda (L)
-                     (if (empty? L)
+                     (if (null? L)
                         empty
                         (cons L (list-tails (cdr L)))
                         )
@@ -52,7 +51,7 @@
 ;; el elemento en posición j (ambos elementos incluidos).
 
 (define sublist (lambda (L i j)
-                     (if (or (empty? L) (> i j))
+                     (if (or (null? L) (> i j))
                         empty                        
                         (cond
                           [(= i 0) (cons (car L) (sublist (cdr L) i (- j 1)))]
@@ -77,7 +76,7 @@
 
 (define exists? (lambda (P L)
                      (cond
-                       [(empty? L) #f]
+                       [(null? L) #f]
                        [(P (car L)) #t]             
                        [else (exists? P (cdr L))]
                      )
@@ -85,7 +84,7 @@
   )
 
 ;; Pruebas
-(exists? empty? '(a b c c e))
+(exists? null? '(a b c c e))
 (exists? symbol? '(a b c d 4))
 ;----------------------------------------------------------------------------------
 ;;5.
@@ -96,12 +95,19 @@
 ;; sucesión fibonacci.
 
 (define list-fibo (lambda (n)
-                     (cond
-                       [(< n 0) (error "No se pueden números negativos")]
-                       [(= n 0) '(0)]
-                       [(= n 1) '(0 1)]
-                       [else (append (list-fibo (- n 1)) (list (+ (last (list-fibo (- n 2))) (last (list-fibo (- n 1))))))]                      
-                       )
+                     (letrec ([fibonacci (lambda (n)
+                                            (cond
+                                              [(= n 0) 0]
+                                              [(= n 1) 1]
+                                              [else (+ (fibonacci (- n 2)) (fibonacci (- n 1)))]
+                                              )
+                                            )
+                                          ])
+                              (cond
+                                [(= n 0) '(0)]
+                                [else (cons (fibonacci n) (list-fibo (- n 1)))]
+                                )
+                              )
                   )
   )
 
@@ -117,7 +123,6 @@
 
 (define factorial (lambda (n)
                      (cond
-                       [(< n 0) (error "No se pueden números negativos")]
                        [(= n 0) 1]
                        [else (* n (factorial (- n 1)))]                                    
                        )
@@ -140,7 +145,6 @@
 
 (define list-facts-two (lambda (n)
                      (cond
-                       [(< n 0) (error "No se pueden números negativos")]
                        [(= n 0) empty]
                        [(= n 1) '(1)]
                        [(even? n) (append (list-facts-two (- n 2)) (list (factorial n)))]
@@ -162,7 +166,7 @@
 
 (define count-occurrences (lambda (x L)
                      (cond
-                       [(empty? L) 0]                       
+                       [(null? L) 0]                       
                        [else (+
                               (if (list? (car L))
                                   (count-occurrences x (car L))
@@ -190,7 +194,7 @@
 
 (define flatten (lambda (L)
                      (cond
-                       [(empty? L) empty]                       
+                       [(null? L) empty]                       
                        [else (append
                               (if (list? (car L))
                                   (flatten (car L))
@@ -215,7 +219,7 @@
 ;; Devuelve #f en caso contrario.
 
 (define every? (lambda (P L)
-                     (if (empty? L)
+                     (if (null? L)
                          #t                     
                          (and (P (car L)) (every? P (cdr L)))                           
                          )
@@ -229,7 +233,8 @@
 
 ;;10.
 ;; splitnumber:
-;; Propósito:
+;; Propósito: Función que recibe un número n y retorna un string con
+;; el número n inverso.
 (define splitnumber (lambda (n)
                       (if(< n 10)
                          (number->string n)
@@ -237,6 +242,9 @@
                          ) 
                       )
   )
+;; pruebas
+(splitnumber 432)
+(splitnumber 9513)
 
 ;; upside-down:
 ;; Propósito:
@@ -247,11 +255,11 @@
                       (string->number (splitnumber n))                         
                       )
   )
-  
-;; (string->number (string (car (string->list (number->string 12345)))))
+
 ;; Pruebas
  (upside-down 432)
  (upside-down 9513)
+
 ;;-------------------------------------------------------------------
 ;; 11.
 ;; merge:
@@ -261,8 +269,8 @@
 
 (define merge (lambda (L1 L2)
                         (cond
-                          [(empty? L1) L2]
-                          [(empty? L2) L1]
+                          [(null? L1) L2]
+                          [(null? L2) L1]
                           [(<= (car L1) (car L2)) (cons  (car L1) (merge (cdr L1) L2))]
                           [else (cons  (car L2) (merge L1 (cdr L2)))]
                           )
@@ -283,14 +291,14 @@
 
 (define zip (lambda (F L1 L2)
                         (cond
-                         [(empty? L1) empty]
+                         [(null? L1) empty]
                          [else (cons (F (car L1) (car L2)) (zip F (cdr L1) (cdr L2)))]
                          )
                       )
   )
 ;;pruebas
 (zip + '(1 4) '(6 2))
-(zip * '(11 5 6) '(10 9 8)
+(zip * '(11 5 6) '(10 9 8))
 
 ;;--------------------------------------------------------
 ;;13.
@@ -323,7 +331,7 @@
 
 (define eliminar (lambda (n L)
                    (cond
-                     [(empty? L) empty]
+                     [(null? L) empty]
                      [(eq? n (car L)) (cdr L)]
                      [else (cons (car L) (eliminar n (cdr L)))]
                      )
@@ -340,8 +348,8 @@
 
 (define organizar (lambda (L F)
                     (cond
-                      [(empty? L) empty]
-                      [(empty? (cdr L)) (car L)]
+                      [(null? L) empty]
+                      [(null? (cdr L)) (car L)]
                       [(F (car L) (car (cdr L))) (organizar (cons (car L) (cddr L)) F)]
                       [else (organizar (cdr L) F)]
                       )
@@ -359,7 +367,7 @@
 
 (define sort (lambda (L F)
                (cond
-                 [(empty? L) empty]
+                 [(null? L) empty]
                  [else (cons (organizar L F) (sort (eliminar (organizar L F) L) F))])
                )
   )
@@ -367,8 +375,8 @@
 ;;pruebas
 (sort '(8 2 5 2 3) <)
 (sort '(8 2 5 2 3) >)
-(sort '("a" "c" "bo" "za" "lu") string>)
-|#
+(sort '("a" "c" "bo" "za" "lu") string>?)
+
 ;--------------------------------------------------------------------------
 ;;15.
 ;; hermite:
@@ -387,3 +395,57 @@
 ;;pruebas
 (hermite 5 2)
 (hermite 5 8)
+
+;---------------------------------------------------------------------------
+;16.
+;; bubble-sort:
+;; Propósito: función que recibe como entrada una lista
+;; de números L.
+;; Y retorna la lista L ordenada de manera ascendente.
+
+(define bubble-sort (lambda (L)
+                      (letrec ([f1 (lambda (L)
+                                     (cond
+                                       [(null? (cdr L)) L]
+                                       [(<= (car L) (cadr L)) (cons (car L) (f1 (cdr L)))]
+                                       [else (f1 (cons (cadr L) (cons (car L) (cddr L))))]
+                                       )
+                                     )]
+                               [f2 (lambda (n F L)
+                                     (cond
+                                       [(= n 0) L]
+                                       [else (f2 (- n 1) F (F L))]
+                                       )
+                                     )])
+                        (f2 (- (length L) 1) f1 L)
+                      )) 
+  )
+;;pruebas
+(bubble-sort '(17 16 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1))
+(bubble-sort '(5 4 3 2 1))
+(bubble-sort '(8 7 2 4 3))
+
+;----------------------------------------------------------------
+;17.
+;; path:
+;; Propósito: Funcipón recibe como entrada dos parámetros:
+;; un número n y un árbol binario de búsqueda.
+;; Y retorna una lista con la ruta a tomar (iniciando desde el nodo raíz), indicada
+;; por cadenas left y right, hasta llegar al número n recibido.
+;; Si el número n es encontrado en el nodo raíz,
+;; el procedimiento debe retornar una lista vacía.
+
+(define path (lambda (n BST)
+               (cond
+                 [(null? BST) #t]
+                 [(= n (car BST)) empty]
+                 [(and (number? (car BST)) (list? (cadr BST)) (list? (caddr BST))) (path n (cadr BST))]
+                 [else #f]
+                 )
+               ) 
+  )
+;;pruebas
+(path 17 '(17 (7 () (12 () ()))
+(26 (20 (17 ())
+())
+(31 () ()))))
