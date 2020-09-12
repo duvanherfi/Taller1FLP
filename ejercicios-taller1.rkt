@@ -46,7 +46,7 @@
 ;; sublist:
 ;; Propósito:
 ;; Procedimiento que recibe como argumento una lista L,
-;; un núumero inicial i y un núumero final j.
+;; un número inicial i y un número final j.
 ;; y retorna la sublista entre el elemento en posición i y
 ;; el elemento en posición j (ambos elementos incluidos).
 
@@ -116,24 +116,6 @@
 (list-fibo 6)
 ;----------------------------------------------------------------------------------
 ;;6.
-;; factorial:
-;; Propósito:
-;; Procedimiento que recibe como argumento un numero entero n,
-;; y retorna el factorial del número n
-
-(define factorial (lambda (n)
-                     (cond
-                       [(= n 0) 1]
-                       [else (* n (factorial (- n 1)))]                                    
-                       )
-                  )
-  )
-
-;; Pruebas
-;(factorial 4)
-;(factorial 5)
-
-
 ;; list-facts-two:
 ;; Propósito:
 ;; Procedimiento que recibe como argumento un numero entero n,
@@ -144,12 +126,21 @@
 ;; los factoriales de núumeros pares hasta n!
 
 (define list-facts-two (lambda (n)
-                     (cond
-                       [(= n 0) empty]
-                       [(= n 1) '(1)]
-                       [(even? n) (append (list-facts-two (- n 2)) (list (factorial n)))]
-                       [(not (even? n)) (append (list-facts-two (- n 2)) (list (factorial n)))]
-                       )
+                         (letrec (
+                                  [factorial (lambda (n)
+                                               (cond
+                                                 [(= n 0) 1]
+                                                 [else (* n (factorial (- n 1)))]                                    
+                                                 )
+                                               )]
+                                  )
+                           (cond
+                             [(= n 0) empty]
+                             [(= n 1) '(1)]
+                             [(even? n) (append (list-facts-two (- n 2)) (list (factorial n)))]
+                             [(not (even? n)) (append (list-facts-two (- n 2)) (list (factorial n)))]
+                             )
+                           )                     
                   )
   )
 
@@ -232,27 +223,22 @@
 ;----------------------------------------------------------------------------------------------------
 
 ;;10.
-;; splitnumber:
-;; Propósito: Función que recibe un número n y retorna un string con
-;; el número n inverso.
-(define splitnumber (lambda (n)
-                      (if(< n 10)
-                         (number->string n)
-                         (string-append (number->string (remainder n 10))  (splitnumber (quotient n 10)))
-                         ) 
-                      )
-  )
-;; pruebas
-(splitnumber 432)
-(splitnumber 9513)
-
 ;; upside-down:
 ;; Propósito:
 ;; Procedimiento que recibe como argumento un número n.
 ;; y devuelve el numero en el orden inverso al que se recibió.
 
 (define upside-down (lambda (n)
-                      (string->number (splitnumber n))                         
+                      (letrec (
+                               [splitnumber (lambda (n)
+                                              (if(< n 10)
+                                                 (number->string n)
+                                                 (string-append (number->string (remainder n 10))  (splitnumber (quotient n 10)))
+                                                 ) 
+                                              )]
+                               )
+                        (string->number (splitnumber n))
+                        )                                               
                       )
   )
 
@@ -312,8 +298,7 @@
                         (cond
                         [(> a b) acum]
                         [(filter a) (F acum a (filter-acum (+ a 1) b F acum filter))]
-                        [else (filter-acum (+ a 1) b F acum filter)]
-                        
+                        [else (filter-acum (+ a 1) b F acum filter)]                        
                         )
                       )
   )
@@ -323,52 +308,34 @@
 
 ;--------------------------------------------------------------
 ;;14.
-
-
-;; eliminar:
-;; Propósito: Funcion auxiliar que recibe como argumento un numero n y una lista L,
-;; y retorna la lista sin ese elemento n.
-
-(define eliminar (lambda (n L)
-                   (cond
-                     [(null? L) empty]
-                     [(eq? n (car L)) (cdr L)]
-                     [else (cons (car L) (eliminar n (cdr L)))]
-                     )
-                   )
-  )
-
-;;pruebas
-(eliminar 2 '(2 4))
-(eliminar 3 '(5 3 2))
-
-;; organizar:
-;; Propósito: Funcion Auxiliar que recibe una lista L y una funcion de comparación
-;; F y retorna el numero que cumpla con la funcion de comparación F
-
-(define organizar (lambda (L F)
-                    (cond
-                      [(null? L) empty]
-                      [(null? (cdr L)) (car L)]
-                      [(F (car L) (car (cdr L))) (organizar (cons (car L) (cddr L)) F)]
-                      [else (organizar (cdr L) F)]
-                      )
-                    )
-  )
-
-;;pruebas
-(organizar '(3 4 2 1) <)
-(organizar '(2 4 7 6) >)
-
 ;; sort:
 ;; Propósito: función que recibe como entrada dos argumentos:
 ;; una lista de elementos L y una función de comparación F.
 ;; Y retorna la lista L ordenada aplicando la función de comparación F.
 
 (define sort (lambda (L F)
-               (cond
-                 [(null? L) empty]
-                 [else (cons (organizar L F) (sort (eliminar (organizar L F) L) F))])
+               (letrec (
+                        [organize (lambda (L F)
+                                    (cond
+                                      [(null? L) empty]
+                                      [(null? (cdr L)) (car L)]
+                                      [(F (car L) (car (cdr L))) (organize (cons (car L) (cddr L)) F)]
+                                      [else (organize (cdr L) F)]
+                                      )
+                                    )]
+                        [drop (lambda (n L)
+                                (cond
+                                  [(null? L) empty]
+                                  [(eq? n (car L)) (cdr L)]
+                                  [else (cons (car L) (drop n (cdr L)))]
+                                  )
+                                )]
+                        )
+                 (cond
+                   [(null? L) empty]
+                   [else (cons (organize L F) (sort (drop (organize L F) L) F))]
+                 )
+                 )               
                )
   )
 
@@ -404,20 +371,20 @@
 ;; Y retorna la lista L ordenada de manera ascendente.
 
 (define bubble-sort (lambda (L)
-                      (letrec ([f1 (lambda (L)
+                      (letrec ([organize (lambda (L)
                                      (cond
                                        [(null? (cdr L)) L]
-                                       [(<= (car L) (cadr L)) (cons (car L) (f1 (cdr L)))]
-                                       [else (f1 (cons (cadr L) (cons (car L) (cddr L))))]
+                                       [(<= (car L) (cadr L)) (cons (car L) (organize (cdr L)))]
+                                       [else (organize (cons (cadr L) (cons (car L) (cddr L))))]
                                        )
                                      )]
-                               [f2 (lambda (n F L)
+                               [repeat (lambda (n F L)
                                      (cond
                                        [(= n 0) L]
-                                       [else (f2 (- n 1) F (F L))]
+                                       [else (repeat (- n 1) F (F L))]
                                        )
                                      )])
-                        (f2 (- (length L) 1) f1 L)
+                        (repeat (- (length L) 1) organize L)
                       )) 
   )
 ;;pruebas
