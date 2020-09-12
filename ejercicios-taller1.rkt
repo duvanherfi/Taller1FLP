@@ -437,15 +437,12 @@
 
 (define path (lambda (n BST)
                (cond
-                 [(null? BST) #t]
+                 [(null? BST) empty]
                  [(= n (car BST)) empty]
-                 [(and (number? (car BST)) (list? (cadr BST)) (list? (caddr BST))) (path n (cadr BST))]
-                 [else #f]
+                 [(< n (car BST)) (cons  'left (path n (cadr BST)))]
+                 [(> n (car BST)) (cons 'right (path n (caddr BST)))]
                  )
                ) 
   )
 ;;pruebas
-(path 17 '(17 (7 () (12 () ()))
-(26 (20 (17 ())
-())
-(31 () ()))))
+(path 13 '(8 (3 (1 () ()) (6 (4 () ()) (7 () ()))) (10 () (14 (13 () ()) ()))))
