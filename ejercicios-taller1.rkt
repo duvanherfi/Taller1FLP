@@ -97,7 +97,8 @@
 (define list-fibo (lambda (n)
                      (letrec (
                               ;; fibonacci:
-                              ;; Propósito: Esta Funcion Auxiliar recibe un numero n y retorna su Fibonacci.
+                              ;; Propósito: Esta Funcion Auxiliar recibe un numero n y
+                              ;; retorna su Fibonacci.
                               [fibonacci (lambda (n)
                                             (cond
                                               [(= n 0) 0]
@@ -131,7 +132,8 @@
 (define list-facts-two (lambda (n)
                          (letrec (
                                   ;; factorial:
-                                  ;; Propósito: Esta función auxiliar recibe como un numero n y hace su factorial.
+                                  ;; Propósito: Esta función auxiliar recibe como un numero n
+                                  ;; y hace su factorial.
                                   [factorial (lambda (n)
                                                (cond
                                                  [(= n 0) 1]
@@ -236,7 +238,8 @@
 (define upside-down (lambda (n)
                       (letrec (
                                ;; splitnumber:
-                               ;; Propósito: Esta Función auxiliar recibe un numero n y lo divide en 10, para obtener el residuo y el cociente.
+                               ;; Propósito: Esta Función auxiliar recibe un numero n
+                               ;; y lo divide en 10, para obtener el residuo y el cociente.
                                [splitnumber (lambda (n)
                                               (if(< n 10)
                                                  (number->string n)
@@ -323,7 +326,8 @@
 (define sort (lambda (L F)
                (letrec (
                         ;; organize:
-                        ;; Propósito: Esta función auxiliar recibe una lista L y organiza un solo elemento dependiendo la función F que recibe.
+                        ;; Propósito: Esta función auxiliar recibe una lista L
+                        ;; y organiza un solo elemento dependiendo la función F que recibe.
                         [organize (lambda (L F)
                                     (cond
                                       [(null? L) empty]
@@ -333,7 +337,8 @@
                                       )
                                     )]
                         ;; drop:
-                        ;; Propósito: Esta función auxiliar saca el elemento que ya organizo osea n de la lista L.
+                        ;; Propósito: Esta función auxiliar saca el elemento que ya organizó
+                        ;; osea n de la lista L.
                         [drop (lambda (n L)
                                 (cond
                                   [(null? L) empty]
@@ -384,7 +389,8 @@
 (define bubble-sort (lambda (L)
                       (letrec (
                                ;; organize:
-                               ;; Propósito: Esta función auxiliar recibe una lista L y recorre la lista comparando dos elementos.
+                               ;; Propósito: Esta función auxiliar recibe una lista L
+                               ;; y recorre la lista comparando dos elementos.
                                [organize (lambda (L)
                                      (cond
                                        [(null? (cdr L)) L]
@@ -393,7 +399,8 @@
                                        )
                                      )]
                                ;; repeat:
-                               ;; Propósito: Esta función auxiliar ejecuta la función organizar varias veces dependiendo el tamaño de la lista L.
+                               ;; Propósito: Esta función auxiliar ejecuta la función
+                               ;; organizar varias veces dependiendo el tamaño de la lista L.
                                [repeat (lambda (n F L)
                                      (cond
                                        [(= n 0) L]
