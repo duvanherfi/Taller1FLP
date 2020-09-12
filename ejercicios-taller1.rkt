@@ -71,7 +71,7 @@
 ;; Propósito:
 ;; Procedimiento que recibe dos argumentos:
 ;; un predicado P y una lista L, y retorna
-;; #t si algúun elemento de la lista L satisface el predicado P.
+;; #t si algún elemento de la lista L satisface el predicado P.
 ;; Devuelve #f en caso contrario.
 
 (define exists? (lambda (P L)
@@ -95,7 +95,10 @@
 ;; sucesión fibonacci.
 
 (define list-fibo (lambda (n)
-                     (letrec ([fibonacci (lambda (n)
+                     (letrec (
+                              ;; fibonacci:
+                              ;; Propósito:
+                              [fibonacci (lambda (n)
                                             (cond
                                               [(= n 0) 0]
                                               [(= n 1) 1]
@@ -127,6 +130,8 @@
 
 (define list-facts-two (lambda (n)
                          (letrec (
+                                  ;; factorial:
+                                  ;; Propósito:
                                   [factorial (lambda (n)
                                                (cond
                                                  [(= n 0) 1]
@@ -230,6 +235,8 @@
 
 (define upside-down (lambda (n)
                       (letrec (
+                               ;; splitnumber:
+                               ;; Propósito:
                                [splitnumber (lambda (n)
                                               (if(< n 10)
                                                  (number->string n)
@@ -315,6 +322,8 @@
 
 (define sort (lambda (L F)
                (letrec (
+                        ;; organize:
+                        ;; Propósito:
                         [organize (lambda (L F)
                                     (cond
                                       [(null? L) empty]
@@ -323,6 +332,8 @@
                                       [else (organize (cdr L) F)]
                                       )
                                     )]
+                        ;; drop:
+                        ;; Propósito:
                         [drop (lambda (n L)
                                 (cond
                                   [(null? L) empty]
@@ -371,13 +382,18 @@
 ;; Y retorna la lista L ordenada de manera ascendente.
 
 (define bubble-sort (lambda (L)
-                      (letrec ([organize (lambda (L)
+                      (letrec (
+                               ;; organize:
+                               ;; Propósito:
+                               [organize (lambda (L)
                                      (cond
                                        [(null? (cdr L)) L]
                                        [(<= (car L) (cadr L)) (cons (car L) (organize (cdr L)))]
                                        [else (organize (cons (cadr L) (cons (car L) (cddr L))))]
                                        )
                                      )]
+                               ;; repeat:
+                               ;; Propósito:
                                [repeat (lambda (n F L)
                                      (cond
                                        [(= n 0) L]
